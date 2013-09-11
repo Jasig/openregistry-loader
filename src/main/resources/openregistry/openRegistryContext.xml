@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xmlns:p="http://www.springframework.org/schema/p"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+        http://www.springframework.org/schema/beans/spring-beans-3.0.xsd
+        http://www.springframework.org/schema/context
+        http://www.springframework.org/schema/context/spring-context-3.0.xsd">
+
+    <bean class="org.springframework.batch.core.scope.StepScope">
+        <property name="proxyTargetClass" value="true"/>
+    </bean>
+
+    <context:property-placeholder location="file:/etc/openregistry/config/openregistry.properties" ignore-unresolvable="true"/>
+
+    <import resource="classpath:openregistry/disclosureRecalculationStrategyRepository.xml"/>
+    <import resource="classpath:openregistry/identifiers.xml"/>
+    <import resource="classpath:openregistry/reconciler.xml"/>
+    <import resource="classpath:openregistry/electors.xml"/>
+    <import resource="classpath:openregistry/systemOfRecordRepository.xml"/>
+
+    <context:component-scan base-package="org.openregistry.core"/>
+    <context:component-scan base-package="org.openregistry.core.repository"/>
+
+
+    <bean id="dataSource" class="com.jolbox.bonecp.BoneCPDataSource" destroy-method="close">
+        <property name="driverClass" value="${jdbc.driver.classname}" />
+        <property name="jdbcUrl" value="${jdbc.url}" />
+        <property name="username" value="${db.username}"/>
+        <property name="password" value="${db.password}"/>
+    </bean>
+
+    <bean id="databaseConfig" class="org.openregistry.loader.DatabaseConfigObjectFactoryBean" scope="step">
+        <property name="dataSource" ref="dataSource" />
+        <property name="idField" value="#{sorConfiguration[jobParameters['sor']].personConfiguration.keyField}" />
+        <property name="rawTable" value="#{sorConfiguration[jobParameters['sor']].rawTable}" />
+        <property name="auxTable" value="#{sorConfiguration[jobParameters['sor']].auxTable}" />
+    </bean>
+
+    <bean id="annotationTransactionAspect" factory-method="aspectOf"
+        class="org.springframework.transaction.aspectj.AnnotationTransactionAspect">
+        <property name="transactionManager" ref="transactionManager"/>
+    </bean>
+
+    <bean id="entityManagerFactory"
+          class="org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean"
+          p:dataSource-ref="dataSource">
+        <property name="jpaVendorAdapter">
+            <bean class="org.springframework.orm.jpa.vendor.HibernateJpaVendorAdapter"
+                  p:generateDdl="false"
+                  p:showSql="false"/>
+        </property>
+        <property name="jpaPropertyMap">
+            <map>
+                <entry key="hibernate.dialect" value="${hibernate.dialect}"/>
+            </map>
+        </property>
+    </bean>
+
+    <bean id="transactionManager" class="org.springframework.orm.jpa.JpaTransactionManager"
+        p:entityManagerFactory-ref="entityManagerFactory"/>
+
+
+    <bean id="identifierFormatValidatorImpl" class="org.openregistry.core.domain.validation.DefaultIdentifierFormatValidator"/>
+
+    <bean name="SoRSpecificationThreadLocalAspect"
+          class="org.openregistry.aspect.SoRSpecificationThreadLocalAspect"
+          factory-method="aspectOf">
+        <property name="systemOfRecordRepository" ref="xmlSystemOfRecordRepository" />
+    </bean>
+
+    <bean name="LogAspect"
+          class="org.openregistry.aspect.LogAspect"
+          factory-method="aspectOf">
+        <property name="messageSource" ref="messageSource" />
+    </bean>
+
+    <bean id="messageSource" class="org.springframework.context.support.ResourceBundleMessageSource">
+        <property name="basenames">
+            <list>
+                <value>messages</value>
+                <value>uilabels</value>
+                <value>org/openregistry/core/messages/log</value>
+                <value>http_errors</value>
+            </list>
+        </property>
+    </bean>
+
+
+</beans>

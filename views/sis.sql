@@ -1,0 +1,75 @@
+create table sistmo_calnet_curr_vw (
+STU_ID numeric(8),
+UG_GRAD_FLAG CHAR(1),
+ROLE_CD CHAR(1),
+TERM_YR numeric(4),
+TERM_CD CHAR(1),
+REG_STATUS_CD CHAR(1),
+EDUC_LEVEL CHAR(1),
+COLLEGE_CD_PRIMARY CHAR(2),
+MAJOR_CD_PRIMARY CHAR(3),
+ADMIN_CANCEL_FLAG CHAR(1),
+CHNG_DATE timestamp);
+
+create table sistmo_calnet_profile_vw (
+STU_ID numeric(8),
+UG_GRAD_FLAG varchar(1),
+ROLE_CD varchar(1),
+STU_NAME varchar(35),
+BIRTHDATE varchar(6),
+SSN varchar(20),
+ADDR_DISCLOS_CD varchar(1),
+STREET1 varchar(30),
+STREET2 varchar(30),
+CITY varchar(25),
+STATE varchar(2),
+ZIP varchar(9),
+TEL_AREA_CD varchar(3),
+TEL_NUM varchar(7),
+EMAIL_ADDRESS varchar(72),
+EMAIL_DISCLOS_CD varchar(1),
+CONFID_FLAG varchar(1),
+PROFILE_KEEP_DATE timestamp,
+CHNG_DATE timestamp);
+
+create table sistmo_calnet_llm_smr_curr_vw (
+STU_ID numeric(8),
+UG_GRAD_FLAG CHAR(1),
+ROLE_CD CHAR(1),
+TERM_YR numeric(4),
+TERM_CD CHAR(1),
+REG_STATUS_CD CHAR(1),
+EDUC_LEVEL CHAR(1),
+COLLEGE_CD_PRIMARY CHAR(2),
+MAJOR_CD_PRIMARY CHAR(3),
+ADMIN_CANCEL_FLAG CHAR(1),
+CHNG_DATE timestamp);
+
+create table sistmo_calnet_ucx_curr_vw (
+UCX_ID numeric(6),
+LAST_NAME varchar(30),
+FIRST_NAME varchar(30),
+EMAIL_ADDRESS varchar(72),
+BIRTH_MONTH varchar(2),
+BIRTH_DAY varchar(2),
+SSN varchar(20),
+PIN varchar(8));
+
+create table sistmo_calnet_admit_vw (
+STU_ID numeric(8),
+UG_GRAD_FLAG varchar(1),
+ROLE_CD varchar(1),
+STU_NAME varchar(35),
+BIRTHDATE varchar(6),
+SSN varchar(20),
+ADDR_DISCLOS_CD varchar(1),
+STREET1 varchar(30),
+STREET2 varchar(30),
+CITY varchar(25),
+STATE varchar(2),
+ZIP varchar(9),
+TEL_AREA_CD varchar(3),
+TEL_NUM varchar(7),
+EMAIL_ADDRESS varchar(72),
+EMAIL_DISCLOS_CD varchar(1),
+CONFID_FLAG varchar(1));

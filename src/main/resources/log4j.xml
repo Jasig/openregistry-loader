@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE log4j:configuration SYSTEM
+        "http://logging.apache.org/log4j/1.2/apidocs/org/apache/log4j/xml/doc-files/log4j.dtd" >
+<log4j:configuration>
+    <appender name="stdout" class="org.apache.log4j.ConsoleAppender">
+        <layout class="org.apache.log4j.EnhancedPatternLayout">
+            <param name="ConversionPattern" value="%d %p %t [%c] - &lt;%m&gt;%n" />
+        </layout>
+    </appender>
+    <appender name="logFile" class="org.openregistry.log4j.ExecutionFileAppender">
+        <param name="file" value="logs/hr-loader.log" />
+        <layout class="org.apache.log4j.EnhancedPatternLayout">
+            <param name="ConversionPattern" value="%d %p %t [%c] - &lt;%m&gt;%n" />
+        </layout>
+    </appender>
+    <logger name="org.openregistry">
+        <level value="DEBUG" />
+    </logger>
+    <logger name="org.openregistry.core.service.DefaultPersonService">
+        <level value="DEBUG" />
+    </logger>
+    <root>
+        <priority value="ERROR" />
+        <appender-ref ref="stdout" />
+    </root>
+</log4j:configuration>

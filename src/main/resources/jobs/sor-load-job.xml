@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:p="http://www.springframework.org/schema/p"
+       xmlns:batch="http://www.springframework.org/schema/batch"
+       xsi:schemaLocation="http://www.springframework.org/schema/batch http://www.springframework.org/schema/batch/spring-batch-2.2.xsd
+       http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+       http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util.xsd">
+
+    <bean class="org.springframework.batch.core.scope.StepScope">
+        <property name="proxyTargetClass" value="true"/>
+    </bean>
+
+    <import resource="classpath:jobs/launcher/jobs-launcher-context.xml"/>
+    <import resource="classpath:openregistry/openRegistryContext.xml"/>
+
+    <bean id="jobParametersIncrementer" class="org.springframework.batch.core.launch.support.RunIdIncrementer"/>
+
+    <bean id="sorConfiguration" class="org.openregistry.loader.DatabaseViewSorConfigurationFactoryBean">
+        <property name="file" value="file:/etc/openregistry/config/config.groovy"/>
+    </bean>
+
+    <bean id="loadScratchDataTasklet"
+          class="org.openregistry.loader.LoadScratchData"
+          scope="step">
+        <property name="sorConfiguration" value="#{sorConfiguration[jobParameters['sor']]}"/>
+    </bean>
+
+    <bean id="personActionReader"
+          class="org.springframework.batch.item.database.JdbcCursorItemReader"
+          scope="step">
+        <property name="dataSource" ref="dataSource"/>
+        <property name="sql"
+                  value="#{databaseConfig.queries.changeQuery.toString()}"/>
+        <property name="rowMapper">
+            <bean class="org.openregistry.loader.PersonActionRowMapper">
+                <property name="sorConfiguration" value="#{sorConfiguration[jobParameters['sor']]}"/>
+            </bean>
+        </property>
+    </bean>
+    <bean id="personActionProcessor"
+          class="org.openregistry.loader.DatabaseViewSorPersonActionProcessor"
+          scope="step">
+        <property name="sorConfiguration" value="#{sorConfiguration[jobParameters['sor']]}"/>
+    </bean>
+    <bean id="personActionWriter" class="org.openregistry.loader.PersonActionWriter"/>
+    <bean id="jobParameterValidator" class="org.springframework.batch.core.job.DefaultJobParametersValidator">
+        <property name="requiredKeys">
+            <list>
+                <value>sor</value>
+            </list>
+        </property>
+    </bean>
+
+    <batch:job id="sorLoadJob" job-repository="jobRepository" incrementer="jobParametersIncrementer">
+        <batch:listeners>
+            <batch:listener>
+                <bean class="org.openregistry.loader.CleanupListener"/>
+            </batch:listener>
+        </batch:listeners>
+        <batch:validator ref="jobParameterValidator"/>
+        <batch:step id="loadScratchData" next="loadOR">
+            <batch:description>Set up the tables, as needed, for the batch loader</batch:description>
+            <batch:tasklet ref="loadScratchDataTasklet"/>
+        </batch:step>
+        <batch:step id="loadOR">
+            <batch:description>Read from the raw table (finding changes against the aux table), process those changes,
+                and write out to OR and update the aux tables
+            </batch:description>
+            <batch:tasklet>
+                <batch:chunk reader="personActionReader"
+                             processor="personActionProcessor"
+                             writer="personActionWriter"
+                             commit-interval="1"/>
+            </batch:tasklet>
+        </batch:step>
+    </batch:job>
+
+</beans>

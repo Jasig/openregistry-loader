@@ -1,0 +1,148 @@
+import groovy.xml.DOMBuilder
+
+import java.nio.file.FileSystems
+import com.petebevin.markdown.MarkdownProcessor
+import org.xhtmlrenderer.pdf.ITextRenderer
+
+defaultTasks 'clean', 'createDist'
+
+apply plugin: 'idea'
+
+allprojects {
+    apply plugin: "groovy"
+    apply plugin: "java"
+    apply plugin: "maven"
+
+    group = "org.jasig.openregistry"
+    version = "0.1-SNAPSHOT"
+
+    sourceCompatibility = '1.7'
+    targetCompatibility = '1.7'
+
+    repositories {
+        mavenCentral()
+        maven { url "file://${FileSystems.default.getPath(System.getProperty("user.home"), ".m2/repository").toString()}" }
+        flatDir {
+            dirs 'lib'
+        }
+    }
+
+    ext {
+        springVersion = "3.2.4.RELEASE"
+        springBatchVersion = "2.2.1.RELEASE"
+        openregistryVersion = "0.9.2.1"
+        slf4jVersion = "1.6.1"
+        postgresJdbcVersion = "9.1-901.jdbc4"
+        oracleJdbcVersion = "12.1.0.1"
+        groovyVersion = "2.1.5"
+    }
+
+    sourceSets.main.java.srcDirs = []
+    sourceSets.main.groovy.srcDirs = ['src/main/java', 'src/main/groovy']
+
+
+    sourceSets.test.java.srcDirs = []
+    sourceSets.test.groovy.srcDirs = ['src/test/java', 'src/test/groovy']
+}
+
+project.ext {
+    artifactId = "loader"
+}
+
+task wrapper(type: Wrapper) {
+    gradleVersion = '1.7'
+}
+
+buildscript {
+    repositories {
+        mavenCentral()
+    }
+    dependencies {
+        classpath "org.markdownj:markdownj:0.3.0-1.0.2b4"
+        classpath "org.xhtmlrenderer:flying-saucer-pdf:9.0.2"
+    }
+}
+
+dependencies {
+    //openregistry
+    ['openregistry-api', 'openregistry-service-impl', 'openregistry-sor-repository-xml', 'openregistry-repository-jpa-impl'].each {
+        compile("org.jasig.openregistry:${it}:${project.openregistryVersion}") {
+            exclude module: "spring-tx"
+        }
+    }
+
+    // spring batch
+    compile("org.springframework.batch:spring-batch-core:${project.springBatchVersion}") {
+        exclude module: "spring-tx"
+    }
+
+    // spring
+    ['beans', 'context', 'tx'].each {
+        compile "org.springframework:spring-${it}:${project.springVersion}"
+    }
+
+    //  BoneCP jdbc connection pool
+    compile "com.jolbox:bonecp:0.7.1.RELEASE"
+
+    compile "log4j:log4j:1.2.17"
+
+    // slf4j stuff
+    compile "org.slf4j:slf4j-api:${project.slf4jVersion}"
+    compile "org.slf4j:jcl-over-slf4j:${project.slf4jVersion}"
+    compile "org.slf4j:slf4j-log4j12:${project.slf4jVersion}"
+
+    //JDBC
+    runtime "postgresql:postgresql:${project.postgresJdbcVersion}"
+    runtime "oracle:ojdbc7:${project.oracleJdbcVersion}"
+
+    compile "org.codehaus.groovy:groovy-all:${project.groovyVersion}"
+    compile("org.grails:grails-spring:2.2.4") {
+        exclude module: "grails-bootstrap"
+        exclude module: "gant_groovy1.8"
+        exclude module: "javax.servlet-api"
+        exclude module: "hibernate-jpa-2.0-api"
+        exclude module: "slf4j-api"
+        exclude module: "jcl-over-slf4j"
+        exclude module: "spring-web"
+        exclude module: "spring-tx"
+    }
+}
+
+task generatePDFDocument() {
+    outputs.upToDateWhen { false }
+    outputs.file new File(temporaryDir, "readme.pdf")
+    doLast {
+        def e = new File(temporaryDir, "readme.pdf")
+        def processor = new MarkdownProcessor()
+        def docString = ["doc/setup.md", "doc/configuration.md"].collect { processor.markdown(project.file(it).text) }.join('')
+        def doc = DOMBuilder.parse(new StringReader("<html><title>Open Registry Loader</title><body>${docString}</body></html>"))
+        def renderer = new ITextRenderer()
+        renderer.setDocument(doc, null)
+        renderer.layout()
+        renderer.createPDF(e.newOutputStream())
+    }
+}
+
+task createDist(type: Zip, dependsOn: ':build') {
+    def baseDir = { archiveName - ".zip" }
+    into(baseDir) {
+        into("etc") {
+            from(project.file("etc"))
+            from(project.file("src/main/resources")) {
+                include "log4j.xml"
+            }
+        }
+        into("lib") {
+            from(jar)
+            from(project.configurations.runtime)
+        }
+        into("bin") {
+            from(project.file("bin")) {
+                fileMode 0755
+            }
+        }
+        into("doc") {
+            from generatePDFDocument
+        }
+    }
+}
