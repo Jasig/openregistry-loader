@@ -26,7 +26,17 @@ objects, Open Registry schema objects (with its local reference data), OR Loader
 
 * Execute the batch job for each configured SOR by running the following script and passing an SOR name parameter. For example: `$OR_LOADER_DIST_HOME/bin/sor-data-loader.sh HR` or `$OR_LOADER_DIST_HOME/bin/sor-data-loader.sh SIS` 
 
-* Verify the correctness of the entire inbound data from HR processing by examining Open Registry `PRS_*` and `PRC_*` tables.	
+* Verify the correctness of the entire inbound data from HR processing by examining Open Registry `PRS_*` and `PRC_*` tables.
+
+## Adding additional SORs
+
+Once the initial set up is completed, adding the additional SORs to the batch job configuration will require the following steps:
+
+* Add `configuration` mapping block for each new SOR with an unique string `id` of that SOR to `$OR_LOADER_CONFIG_HOME/config/config.groovy`
+
+* Insert a row of data for each new SOR into `prd_system_of_record` tables with `sor_id` value matching the value of the `id` in the `$OR_LOADER_CONFIG_HOME/config/config.groovy`'s `configuration` block. For example:
+
+`INSERT INTO prd_system_of_record (id, sor_id) VALUES (prd_system_of_record_seq.nextval, 'NEW_SOR');`
 
 
 
