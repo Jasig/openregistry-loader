@@ -19,7 +19,6 @@
     <import resource="classpath:openregistry/identifiers.xml"/>
     <import resource="classpath:openregistry/reconciler.xml"/>
     <import resource="classpath:openregistry/electors.xml"/>
-    <import resource="classpath:openregistry/systemOfRecordRepository.xml"/>
 
     <context:component-scan base-package="org.openregistry.core"/>
     <context:component-scan base-package="org.openregistry.core.repository"/>
@@ -68,7 +67,7 @@
     <bean name="SoRSpecificationThreadLocalAspect"
           class="org.openregistry.aspect.SoRSpecificationThreadLocalAspect"
           factory-method="aspectOf">
-        <property name="systemOfRecordRepository" ref="xmlSystemOfRecordRepository" />
+        <property name="systemOfRecordRepository" ref="systemOfRecordRepository" />
     </bean>
 
     <bean name="LogAspect"

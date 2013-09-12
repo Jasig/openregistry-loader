@@ -2,6 +2,8 @@ package org.openregistry.loader
 
 class SorConfiguration {
     String id
+    String name
+    String description
 
     def personConfiguration
 }
