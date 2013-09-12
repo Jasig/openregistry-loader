@@ -11,14 +11,18 @@
         <property name="proxyTargetClass" value="true"/>
     </bean>
 
+    <bean id="sorConfiguration" class="org.openregistry.loader.DatabaseViewSorConfigurationFactoryBean">
+        <property name="file" value="file:/etc/openregistry/config/config.groovy"/>
+    </bean>
+
+    <bean id="systemOfRecordRepository" class="org.openregistry.loader.DSLSystemOfRecordRepository">
+        <property name="databaseViewSorConfigurations" ref="sorConfiguration" />
+    </bean>
+
     <import resource="classpath:jobs/launcher/jobs-launcher-context.xml"/>
     <import resource="classpath:openregistry/openRegistryContext.xml"/>
 
     <bean id="jobParametersIncrementer" class="org.springframework.batch.core.launch.support.RunIdIncrementer"/>
-
-    <bean id="sorConfiguration" class="org.openregistry.loader.DatabaseViewSorConfigurationFactoryBean">
-        <property name="file" value="file:/etc/openregistry/config/config.groovy"/>
-    </bean>
 
     <bean id="loadScratchDataTasklet"
           class="org.openregistry.loader.LoadScratchData"
