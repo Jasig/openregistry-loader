@@ -103,5 +103,5 @@ class PhonesConfiguration {
 class FieldConfiguration {
     def value
     def staticValue
-    def converter
+    def normalizer
 }

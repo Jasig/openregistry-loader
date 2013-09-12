@@ -35,11 +35,11 @@ configuration {
             }
             personStatus {
                 value "termination_dt"
-                converter { value -> value ? 'Inactive' : 'Active' }
+                normalizer { value -> value ? 'Inactive' : 'Active' }
             }
             sorId {
                 value "home_dept_cd"
-                converter { value -> UUID.randomUUID().toString() }
+                normalizer { value -> UUID.randomUUID().toString() }
             }
         }
     }
@@ -82,11 +82,11 @@ configuration {
             }
             personStatus {
                 value "termination_dt"
-                converter { value -> value ? 'Inactive' : 'Active' }
+                normalizer { value -> value ? 'Inactive' : 'Active' }
             }
             sorId {
                 value "home_dept_cd"
-                converter { value -> UUID.randomUUID().toString() }
+                normalizer { value -> UUID.randomUUID().toString() }
             }
         }
     }

@@ -77,7 +77,7 @@ class DatabaseViewSorConfigurationFactoryBean implements FactoryBean<Map<String,
             PhonesDatabaseViewSorConfiguration.metaClass.methodMissing = notSoSimpleMethodMissing(null)
 
             FieldConfiguration.metaClass.methodMissing = { name, args ->
-                if (name in ['value', 'staticValue', 'converter']) {
+                if (name in ['value', 'staticValue', 'normalizer']) {
                     delegate."${name}" = args[0]
                 }
             }

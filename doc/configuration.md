@@ -16,7 +16,7 @@ The grouping notation (`{...}`) can also denote a function (written in [groovy](
 appropriate:
 
     key {
-        converter { value -> value.toUpperCase() }
+        normalizer { value -> value.toUpperCase() }
     }
 
 # Database View System of Record Configuration
@@ -33,10 +33,10 @@ group. A `fieldConfiguration` can have two fields (from three possible):
 
 * value: String: name of the column from which to get the value
 * staticValue: String: a static value
-* converter: function: if not using a staticValue, the final value is the value returned from the function. The value
+* normalizer: function: if not using a staticValue, the final value is the value returned from the function. The value
 from the table cell is passed as an argument to the function. ex: `{ value -> value.toUpperCase() }`
 
-Only one of `value` and `staticValue` can be used. `converter` is only used if `value` is used.
+Only one of `value` and `staticValue` can be used. `normalizer` is only used if `value` is used.
 
 ## Database View System of Record Configuration Items
 * configuration: group:
@@ -149,11 +149,11 @@ Only one of `value` and `staticValue` can be used. `converter` is only used if `
                 }
                 personStatus {
                     value "termination_dt"
-                    converter { value -> value ? 'Inactive' : 'Active' }
+                    normalizer { value -> value ? 'Inactive' : 'Active' }
                 }
                 sorId {
                     value "home_dept_cd"
-                    converter { value -> UUID.randomUUID().toString() }
+                    normalizer { value -> UUID.randomUUID().toString() }
                 }
             }
         }

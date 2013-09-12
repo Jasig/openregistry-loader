@@ -36,8 +36,8 @@ class DatabaseViewSorPersonActionProcessor extends PersonActionProcessor impleme
                 return fieldConfig.staticValue
             }
             def value = row."${fieldConfig.value}"
-            if (fieldConfig.converter) {
-                value = fieldConfig.converter(value)
+            if (fieldConfig.normalizer) {
+                value = fieldConfig.normalizer(value)
             }
             return value
         }
