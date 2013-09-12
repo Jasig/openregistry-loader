@@ -10,7 +10,7 @@
 Otherwise, ALL the DB objects with its data will be dropped and freshly re-created!) to create Spring Batch schema
 objects, Open Registry schema objects (with its local reference data), OR Loader schema objects.
 
-* Copy `$OR_LOADER_DIST_HOME/etc/openregistry/config` and `$OR_LOADER_DIST_HOME/etc/openregistry/sor-repository` directories to `$OR_LOADER_CONFIG_HOME`
+* Copy `$OR_LOADER_DIST_HOME/etc/openregistry/config` directory to `$OR_LOADER_CONFIG_HOME`
 
 * Configure JDBC connection properties in `$OR_LOADER_CONFIG_HOME/config/openregistry.properties` with values of the local target Oracle RDBMS. Example config of local development instance of Oracle. For example:
 	
