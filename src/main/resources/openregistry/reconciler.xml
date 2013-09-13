@@ -25,5 +25,6 @@
        xsi:schemaLocation="http://www.springframework.org/schema/beans
         http://www.springframework.org/schema/beans/spring-beans-2.5.xsd">
 
-    <bean class="org.openregistry.core.service.reconciliation.NameReconciler" id="nameReconciler" />
+    <!-- <bean class="org.openregistry.core.service.reconciliation.NameReconciler" id="nameReconciler" /> -->
+    <bean class="org.openregistry.IdMatchReconciler" id="idMatchReconciler" />
 </beans>

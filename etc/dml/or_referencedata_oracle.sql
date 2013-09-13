@@ -10,6 +10,9 @@ INSERT INTO prd_identifier_types (identifier_t, deleted, modifiable, notifiable,
 INSERT INTO prd_identifier_types (identifier_t, deleted, modifiable, notifiable, private, name, format, description)
   VALUES (prd_identifier_types_seq.nextval, 0, 1, 1, 1, 'CALNETID', 'n/a', 'CAL NetId');
 
+INSERT INTO prd_identifier_types (identifier_t, deleted, modifiable, notifiable, private, name, format, description)
+  VALUES (prd_identifier_types_seq.nextval, 0, 1, 1, 1, 'IDMATCH', 'n/a', 'ID Match Reference');
+
 
 -- SORs
 INSERT INTO prd_system_of_record (id, sor_id)

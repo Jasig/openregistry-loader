@@ -36,4 +36,6 @@
     <bean id="sSNLast5IdentifierAssigner" class="org.openregistry.identifier.SSNLast5IdentiferAssigner">
         <property name="referenceRepository" ref="referenceRepository" />
     </bean>
+
+    <bean id="idMatchIdentifierAssigner" class="org.openregistry.identifier.IdMatchIdentifierAssigner" />
 </beans>

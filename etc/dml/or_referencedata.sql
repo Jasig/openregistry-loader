@@ -10,6 +10,9 @@ INSERT INTO prd_identifier_types (identifier_t, deleted, modifiable, notifiable,
 INSERT INTO prd_identifier_types (identifier_t, deleted, modifiable, notifiable, private, name, format, description)
   VALUES (NEXTVAL('prd_identifier_types_seq'), false, true, true, true, 'CALNETID', 'n/a', 'CAL NetId');
 
+INSERT INTO prd_identifier_types (identifier_t, deleted, modifiable, notifiable, private, name, format, description)
+  VALUES (NEXTVAL('prd_identifier_types_seq'), false, true, true, true, 'IDMATCH', 'n/a', 'ID Match Reference');
+
 -- SORs
 INSERT INTO prd_system_of_record (id, sor_id)
   VALUES (NEXTVAL('prd_system_of_record_seq'), 'HR');
