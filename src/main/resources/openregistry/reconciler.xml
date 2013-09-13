@@ -26,5 +26,8 @@
         http://www.springframework.org/schema/beans/spring-beans-2.5.xsd">
 
     <!-- <bean class="org.openregistry.core.service.reconciliation.NameReconciler" id="nameReconciler" /> -->
-    <bean class="org.openregistry.IdMatchReconciler" id="idMatchReconciler" />
+    <bean class="org.openregistry.IdMatchReconciler" id="idMatchReconciler">
+        <property name="idMatchService" ref="idMatchService" />
+        <property name="personRepository" ref="personRepository" />
+    </bean>
 </beans>
