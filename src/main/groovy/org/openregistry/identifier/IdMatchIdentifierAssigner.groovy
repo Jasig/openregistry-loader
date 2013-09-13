@@ -21,7 +21,7 @@ class IdMatchIdentifierAssigner extends AbstractIdentifierAssigner {
         if (idMatchId) {
             logger.debug("found idMatchId for personId ${sorPerson.personId}")
         } else {
-            def idMatchIdResponse = idMatchService.getIdMatchServiceResponse(sorPerson)
+            def idMatchIdResponse = idMatchService.putIdMatchServiceResponse(sorPerson)
             person.addIdentifier(referenceRepository.findIdentifierType(identifierType), idMatchIdResponse.referenceId).with {
                 deleted = false
                 primary = true
