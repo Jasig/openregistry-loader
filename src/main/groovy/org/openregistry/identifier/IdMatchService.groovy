@@ -4,12 +4,15 @@ import org.openregistry.core.domain.sor.SorPerson
 
 class IdMatchService {
     IdMatchServiceResponse getIdMatchServiceResponse(SorPerson sorPerson) {
-        throw new UnsupportedOperationException("this hasn't been implemented yet")
+        //TODO: really implement this
+        return new IdMatchServiceResponse(status: IdMatchServiceResponse.Status.OK, referenceId: sorPerson.sorId, fullResponse: [:])
     }
 }
 
 class IdMatchServiceResponse {
-    int status
+    Status status
     String referenceId
     Map fullResponse
+
+    enum Status {OK, NOT_FOUND, CREATED}
 }

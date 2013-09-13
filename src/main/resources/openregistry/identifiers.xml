@@ -37,5 +37,8 @@
         <property name="referenceRepository" ref="referenceRepository" />
     </bean>
 
-    <bean id="idMatchIdentifierAssigner" class="org.openregistry.identifier.IdMatchIdentifierAssigner" />
+    <bean id="idMatchIdentifierAssigner" class="org.openregistry.identifier.IdMatchIdentifierAssigner">
+        <property name="idMatchService" ref="idMatchService" />
+        <property name="referenceRepository" ref="referenceRepository" />
+    </bean>
 </beans>

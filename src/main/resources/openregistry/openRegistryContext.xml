@@ -87,5 +87,6 @@
         </property>
     </bean>
 
+    <bean id="idMatchService" class="org.openregistry.identifier.IdMatchService" />
 
 </beans>
