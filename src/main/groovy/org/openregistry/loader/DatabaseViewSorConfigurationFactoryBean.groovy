@@ -37,8 +37,8 @@ class DatabaseViewSorConfigurationFactoryBean implements FactoryBean<Map<String,
                         arg.delegate = c
                         arg.resolveStrategy = Closure.DELEGATE_ONLY
                         arg()
-                        if (name == 'localAttribute') {
-                            delegate.localAttributeConfigurations << c
+                        if (name in ['localAttribute', 'name']) {
+                            delegate."${name}Configurations" << c
                         } else {
                             delegate."${name}Configuration" = c
                         }
@@ -67,7 +67,11 @@ class DatabaseViewSorConfigurationFactoryBean implements FactoryBean<Map<String,
                     ]
             )
 
-            NamesDatabaseViewSorConfiguration.metaClass.methodMissing = notSoSimpleMethodMissing(null)
+            NamesDatabaseViewSorConfiguration.metaClass.methodMissing = notSoSimpleMethodMissing(
+                    [
+                            'name': NameDatabaseViewSorConfiguration
+                    ]
+            )
             EmailAddressesDatabaseViewSorConfiguration.metaClass.methodMissing = notSoSimpleMethodMissing(null)
             DisclosureSettingsConfiguration.metaClass.methodMissing = notSoSimpleMethodMissing(null)
             LocalAttributeDatabaseViewSorConfiguration.metaClass.methodMissing = notSoSimpleMethodMissing(null)
@@ -75,6 +79,7 @@ class DatabaseViewSorConfigurationFactoryBean implements FactoryBean<Map<String,
             AddressesDatabaseViewSorConfiguration.metaClass.methodMissing = notSoSimpleMethodMissing(null)
             LeavesDatabaseViewSorConfiguration.metaClass.methodMissing = notSoSimpleMethodMissing(null)
             PhonesDatabaseViewSorConfiguration.metaClass.methodMissing = notSoSimpleMethodMissing(null)
+            NameDatabaseViewSorConfiguration.metaClass.methodMissing = notSoSimpleMethodMissing(null)
 
             FieldConfiguration.metaClass.methodMissing = { name, args ->
                 if (name in ['value', 'staticValue', 'normalizer']) {
