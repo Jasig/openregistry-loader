@@ -6,6 +6,20 @@ class SorConfiguration {
     String description
 
     def personConfiguration
+    def notificationConfiguration
+}
+
+class NotificationConfiguration {
+    def emailConfiguration
+}
+
+class EmailNotificationConfiguration {
+    def host
+    def port
+    def username
+    def password
+    def from
+    def to
 }
 
 class SorPersonConfiguration {

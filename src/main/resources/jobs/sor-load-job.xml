@@ -16,7 +16,7 @@
     </bean>
 
     <bean id="systemOfRecordRepository" class="org.openregistry.loader.DSLSystemOfRecordRepository">
-        <property name="databaseViewSorConfigurations" ref="sorConfiguration" />
+        <property name="databaseViewSorConfigurations" ref="sorConfiguration"/>
     </bean>
 
     <import resource="classpath:jobs/launcher/jobs-launcher-context.xml"/>
@@ -56,10 +56,17 @@
         </property>
     </bean>
 
+    <bean id="cleanupListener"
+          class="org.openregistry.loader.CleanupListener"
+          scope="step">
+        <property name="sorConfiguration" value="#{sorConfiguration[jobParameters['sor']]}"/>
+    </bean>
+
     <batch:job id="sorLoadJob" job-repository="jobRepository" incrementer="jobParametersIncrementer">
         <batch:listeners>
             <batch:listener>
-                <bean class="org.openregistry.loader.CleanupListener"/>
+                <bean id="cleanupListener"
+                      class="org.openregistry.loader.CleanupListener"/>
             </batch:listener>
         </batch:listeners>
         <batch:validator ref="jobParameterValidator"/>

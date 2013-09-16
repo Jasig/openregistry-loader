@@ -81,6 +81,8 @@ dependencies {
         compile "org.springframework:spring-${it}:${project.springVersion}"
     }
 
+    compile "javax.mail:mail:1.4.4"
+
     //  BoneCP jdbc connection pool
     compile "com.jolbox:bonecp:0.7.1.RELEASE"
 

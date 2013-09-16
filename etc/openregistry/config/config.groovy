@@ -1,5 +1,15 @@
 configuration {
     id "HR"
+    notification {
+        email {
+            host ""
+            port 465
+            username ""
+            password ""
+            from ""
+            to ""
+        }
+    }
     person {
         keyField "empl_id"
         names {

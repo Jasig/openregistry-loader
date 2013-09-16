@@ -17,7 +17,7 @@ class DatabaseViewSorConfigurationFactoryBean implements FactoryBean<Map<String,
             // TODO: move
 
             def field = { d, name, arg ->
-                if (arg instanceof String) {
+                if (arg instanceof String || arg instanceof Integer) {
                     d."${name}" = arg
                 } else if (arg instanceof Closure) {
                     d."${name}" = new FieldConfiguration()
@@ -47,7 +47,10 @@ class DatabaseViewSorConfigurationFactoryBean implements FactoryBean<Map<String,
             }
 
             DatabaseViewSorConfiguration.metaClass.methodMissing = notSoSimpleMethodMissing(
-                    ["person": PersonDatabaseViewSorConfiguration]
+                    [
+                            "person": PersonDatabaseViewSorConfiguration,
+                            "notification": NotificationConfiguration
+                    ]
             )
             PersonDatabaseViewSorConfiguration.metaClass.methodMissing = notSoSimpleMethodMissing(
                     [
@@ -66,6 +69,11 @@ class DatabaseViewSorConfigurationFactoryBean implements FactoryBean<Map<String,
                             'phones': PhonesDatabaseViewSorConfiguration
                     ]
             )
+            NotificationConfiguration.metaClass.methodMissing = notSoSimpleMethodMissing(
+                    [
+                            'email': EmailNotificationConfiguration
+                    ]
+            )
 
             NamesDatabaseViewSorConfiguration.metaClass.methodMissing = notSoSimpleMethodMissing(null)
             EmailAddressesDatabaseViewSorConfiguration.metaClass.methodMissing = notSoSimpleMethodMissing(null)
@@ -75,6 +83,7 @@ class DatabaseViewSorConfigurationFactoryBean implements FactoryBean<Map<String,
             AddressesDatabaseViewSorConfiguration.metaClass.methodMissing = notSoSimpleMethodMissing(null)
             LeavesDatabaseViewSorConfiguration.metaClass.methodMissing = notSoSimpleMethodMissing(null)
             PhonesDatabaseViewSorConfiguration.metaClass.methodMissing = notSoSimpleMethodMissing(null)
+            EmailNotificationConfiguration.metaClass.methodMissing = notSoSimpleMethodMissing(null)
 
             FieldConfiguration.metaClass.methodMissing = { name, args ->
                 if (name in ['value', 'staticValue', 'normalizer']) {
