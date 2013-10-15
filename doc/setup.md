@@ -4,6 +4,13 @@
 
 * Unzip the distribution archive into a filesystem directory of choice. Example: `/opt/openregistry-loader-0.1-SNAPSHOT`. This directory will be referred to as `$OR_LOADER_DIST_HOME`
 
+* Place JDBC driver jar for your SORs in `$OR_LOADER_DIST_HOME/lib`. Note: This file might have to be extracted from an
+archive file; Please follow instructions at the following sites.
+    * Oracle: http://www.oracle.com/technetwork/database/features/jdbc/index-091264.html
+    * PostgreSQL: http://jdbc.postgresql.org/download.html
+    * Microsoft SQL Server: http://msdn.microsoft.com/en-us/sqlserver/aa937724.aspx
+    * MySQL: http://dev.mysql.com/downloads/connector/j/
+
 * Create loader configuration directory `/etc/openregistry`. This directory will be referred to as `$OR_LOADER_CONFIG_HOME`
 
 * Run the `$OR_LOADER_DIST_HOME/etc/dml/wipe_and_load_oracle.sql` DML script (IMPORTANT! - only done once, initially.
@@ -13,14 +20,13 @@ objects, Open Registry schema objects (with its local reference data), OR Loader
 * Copy `$OR_LOADER_DIST_HOME/etc/openregistry/config` directory to `$OR_LOADER_CONFIG_HOME`
 
 * Configure JDBC connection properties in `$OR_LOADER_CONFIG_HOME/config/openregistry.properties` with values of the local target Oracle RDBMS. Example config of local development instance of Oracle. For example:
-	
-`jdbc.driver.classname=oracle.jdbc.OracleDriver`
 
-`jdbc.url=jdbc:oracle:thin:@localhost:1521:orcl`
-
-`db.username=ORC`
-
-`db.password=ORC`
+    ```properties
+    jdbc.driver.classname=oracle.jdbc.OracleDriver
+    jdbc.url=jdbc:oracle:thin:@localhost:1521:orcl
+    db.username=ORC
+    db.password=ORC
+    ```
 
 * Configure mappings for each SOR in `$OR_LOADER_CONFIG_HOME/config/config.groovy`.
 
