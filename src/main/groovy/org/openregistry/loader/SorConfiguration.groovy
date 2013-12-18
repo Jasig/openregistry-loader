@@ -46,6 +46,8 @@ class SorRolesConfiguration {
     def leavesConfiguration
     def phonesConfiguration
     def urlsConfiguration
+
+    def localAttributeConfigurations = [] as Set
 }
 
 class SorLocalAttributeConfiguration {

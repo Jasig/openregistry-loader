@@ -69,6 +69,7 @@ class DatabaseViewSorPersonActionProcessor extends PersonActionProcessor impleme
             def doneAddresses = [] as Set
             def doneLeaves = [] as Set
             def donePhones = [] as Set
+            def doneRoleLocalAttributes = [] as Set
             item.rows.each { row ->
                 // do name
                 if (!doneNames.containsKey(getFieldValue(sorConfiguration.personConfiguration.namesConfiguration.keyField, row))) {
@@ -214,6 +215,20 @@ class DatabaseViewSorPersonActionProcessor extends PersonActionProcessor impleme
                             url = new URL(value)
                             return it
                         })
+                    }
+                }
+
+                // do role local attributes for roles
+                if (sorConfiguration.personConfiguration.rolesConfiguration?.localAttributeConfigurations) {
+                    sorConfiguration.personConfiguration.rolesConfiguration.localAttributeConfigurations.each { LocalAttributeDatabaseViewSorConfiguration localAttributeDatabaseViewSorConfiguration ->
+                        def type = getFieldValue(localAttributeDatabaseViewSorConfiguration.type, row)
+                        def roleKey = getFieldValue(sorConfiguration.personConfiguration.rolesConfiguration.keyField, row)
+                        def key = [roleKey, type]
+                        if (!doneRoleLocalAttributes.contains(key)) {
+                            SorRole role = doneRoles[roleKey]
+                            role.sorLocalAttributes[type] = getFieldValue(localAttributeDatabaseViewSorConfiguration.value, row)
+                            doneRoleLocalAttributes << key
+                        }
                     }
                 }
             }

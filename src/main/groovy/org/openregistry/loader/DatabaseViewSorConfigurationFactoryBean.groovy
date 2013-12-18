@@ -63,7 +63,8 @@ class DatabaseViewSorConfigurationFactoryBean implements FactoryBean<Map<String,
                             'urls': UrlsDatabaseViewSorConfiguration,
                             'addresses': AddressesDatabaseViewSorConfiguration,
                             'leaves': LeavesDatabaseViewSorConfiguration,
-                            'phones': PhonesDatabaseViewSorConfiguration
+                            'phones': PhonesDatabaseViewSorConfiguration,
+                            'localAttribute': LocalAttributeDatabaseViewSorConfiguration
                     ]
             )
 
