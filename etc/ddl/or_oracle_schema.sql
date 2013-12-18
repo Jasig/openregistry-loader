@@ -510,6 +510,15 @@
         primary key (record_id, REV)
     );
 
+    create table aud_prs_role_records_loc_attr (
+        REV number(10,0) not null,
+        role_record_id number(19,0) not null,
+        attribute_value varchar2(255 char) not null,
+        attribute_type varchar2(255 char) not null,
+        REVTYPE number(3,0),
+        primary key (REV, role_record_id, attribute_value, attribute_type)
+    );
+
     create table aud_prs_sor_persons (
         record_id number(19,0) not null,
         REV number(10,0) not null,
@@ -922,6 +931,13 @@
         unique (system_of_record_id, id, affiliation_t)
     );
 
+    create table prs_role_records_loc_attr (
+        role_record_id number(19,0) not null,
+        attribute_value varchar2(255 char),
+        attribute_type varchar2(255 char) not null,
+        primary key (role_record_id, attribute_type)
+    );
+
     create table prs_sor_persons (
         record_id number(19,0) not null,
         date_of_birth date,
@@ -1173,6 +1189,11 @@
 
     alter table aud_prs_role_records 
         add constraint FK7F556BF63C81FA73 
+        foreign key (REV) 
+        references SpringSecurityRevisionEntity;
+
+    alter table aud_prs_role_records_loc_attr 
+        add constraint FKD7B5D1B93C81FA73 
         foreign key (REV) 
         references SpringSecurityRevisionEntity;
 
@@ -1627,6 +1648,11 @@
         add constraint FK41ECE4796BAEDE0 
         foreign key (system_of_record_id) 
         references prd_system_of_record;
+
+    alter table prs_role_records_loc_attr 
+        add constraint FKD977A88F396A254 
+        foreign key (role_record_id) 
+        references prs_role_records;
 
     create index SOR_PERSON_SOURCE_AND_ID_INDEX on prs_sor_persons (source_sor_id, id);
 
