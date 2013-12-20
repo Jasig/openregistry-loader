@@ -25,6 +25,7 @@
        xsi:schemaLocation="http://www.springframework.org/schema/beans
         http://www.springframework.org/schema/beans/spring-beans-2.5.xsd">
 
+    <!--
     <bean class="org.openregistry.core.service.DefaultBirthDateFieldElector" id="birthDateFieldElector" />
     <bean class="org.openregistry.core.service.DefaultGenderFieldElector" id="genderFieldElector" />
     <bean class="org.openregistry.core.service.DefaultNameFieldSelector" id="preferredNameFieldElector" />
@@ -34,5 +35,28 @@
     <bean class="org.openregistry.core.service.DefaultDisclosureSettingsFieldElector" id="disclosureFieldElector" />
     <bean class="org.openregistry.core.service.DefaultSSNFieldElector" id="ssnFieldElector" />
     <bean class="org.openregistry.core.service.DefaultSorRoleElector" id="sorRoleElector"/>
-    
+    -->
+
+    <bean id="genderFieldElector"
+          class="org.openregistry.core.service.elector.NullFieldElector"/>
+    <bean id="sorRoleElector"
+          class="org.openregistry.core.service.DefaultSorRoleElector"/>
+    <bean id="birthDateFieldElector"
+          class="org.openregistry.core.service.elector.LastInConfigurableFieldElector"
+          p:allowNull="false"
+          p:returnType="java.util.Date"
+          p:spel="dateOfBirth"/>
+    <bean id="preferredNameFieldElector"
+          class="org.openregistry.core.service.elector.NullFieldElector"/>
+    <bean id="officialNameFieldElector"
+          class="org.openregistry.core.service.elector.NullFieldElector"/>
+    <bean id="disclosureFieldElector"
+          class="org.openregistry.core.service.elector.NullFieldElector"/>
+    <bean id="ssnFieldElector"
+          class="org.openregistry.core.service.elector.LastInConfigurableFieldElector"
+          p:allowNull="false"
+          p:returnType="java.lang.String"
+          p:spel="ssn" />
+
+
 </beans>

@@ -942,6 +942,7 @@
         record_id number(19,0) not null,
         date_of_birth date,
         gender varchar2(1 char),
+        lastModified timestamp,
         person_id number(19,0),
         id varchar2(255 char),
         source_sor_id varchar2(255 char) not null,
