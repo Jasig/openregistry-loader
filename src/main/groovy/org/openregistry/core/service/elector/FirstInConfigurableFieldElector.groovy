@@ -3,10 +3,10 @@ package org.openregistry.core.service.elector
 import org.openregistry.core.domain.sor.SorPerson
 
 /**
- * {@link org.openregistry.core.service.FieldElector} that returns the field from the latest {@link SorPerson}.
+ * {@link org.openregistry.core.service.FieldElector} that returns the field from the earliest {@link SorPerson}.
  * Configurable to find the first non-null value. See also {@link AbstractConfigurableFieldElector}
  */
-class LastInConfigurableFieldElector extends AbstractConfigurableFieldElector {
+class FirstInConfigurableFieldElector extends AbstractConfigurableFieldElector {
     /**
      * Whether to allow the return a null value. Effective this means it will search for the first non-null value, only
      * returning null if it exhausts the list.
@@ -15,7 +15,7 @@ class LastInConfigurableFieldElector extends AbstractConfigurableFieldElector {
 
     @Override
     def <returnType> returnType elect(SorPerson newestPerson, List<SorPerson> list, boolean deletion) {
-        def effectiveList = deletion ? list : [newestPerson] + list
+        def effectiveList = (deletion ? list : [newestPerson] + list as List).reverse()
         return this.electFromList(effectiveList, returnType, allowNull)
     }
 }

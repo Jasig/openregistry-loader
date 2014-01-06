@@ -47,16 +47,25 @@
           p:returnType="java.util.Date"
           p:spel="dateOfBirth"/>
     <bean id="preferredNameFieldElector"
-          class="org.openregistry.core.service.elector.NullFieldElector"/>
+          class="org.openregistry.core.service.elector.SorPriorityConfigurableFieldElector">
+        <property name="returnType" value="org.openregistry.core.domain.sor.SorName" />
+        <property name="spel" value="names[0]" />
+        <property name="sorList">
+            <list>
+                <value>HR</value>
+                <value>SIS</value>
+            </list>
+        </property>
+    </bean>
     <bean id="officialNameFieldElector"
           class="org.openregistry.core.service.elector.NullFieldElector"/>
     <bean id="disclosureFieldElector"
           class="org.openregistry.core.service.elector.NullFieldElector"/>
     <bean id="ssnFieldElector"
-          class="org.openregistry.core.service.elector.LastInConfigurableFieldElector"
+          class="org.openregistry.core.service.elector.FirstInConfigurableFieldElector"
           p:allowNull="false"
           p:returnType="java.lang.String"
-          p:spel="ssn" />
+          p:spel="ssn"/>
 
 
 </beans>
