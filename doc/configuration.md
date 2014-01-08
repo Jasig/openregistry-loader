@@ -102,6 +102,10 @@ Only one of `value` and `staticValue` can be used. `normalizer` is only used if 
                 * keyField: field:
                 * type: field: String:
                 * url: field: String:
+            * localAttribute: group: configuration for a localAttribute. There may be multiple of these in a person
+                * keyField (required): field: key field distinguishing the attribute. Should be the key of the `localAttribute` set on
+                the person.
+                * value (required): field: value for the local attribute
         * localAttribute: group: configuration for a localAttribute. There may be multiple of these in a person
             * keyField (required): field: key field distinguishing the attribute. Should be the key of the `localAttribute` set on
             the person.
