@@ -37,7 +37,7 @@ abstract class AbstractConfigurableFieldElector<returnType> implements FieldElec
             }
         }
         if (!allowNull) {
-            throw new IllegalStateException("no valid value found")
+            throw new IllegalStateException("no valid value found for [${spel}]")
         }
         return null
     }
