@@ -13,7 +13,8 @@
         <property name="proxyTargetClass" value="true"/>
     </bean>
 
-    <context:property-placeholder location="file:/etc/openregistry/config/openregistry.properties" ignore-unresolvable="true"/>
+    <context:property-placeholder location="file:/etc/openregistry/config/openregistry.properties"
+                                  ignore-unresolvable="true"/>
 
     <import resource="classpath:openregistry/disclosureRecalculationStrategyRepository.xml"/>
     <import resource="classpath:openregistry/identifiers.xml"/>
@@ -25,21 +26,21 @@
 
 
     <bean id="dataSource" class="com.jolbox.bonecp.BoneCPDataSource" destroy-method="close">
-        <property name="driverClass" value="${jdbc.driver.classname}" />
-        <property name="jdbcUrl" value="${jdbc.url}" />
+        <property name="driverClass" value="${jdbc.driver.classname}"/>
+        <property name="jdbcUrl" value="${jdbc.url}"/>
         <property name="username" value="${db.username}"/>
         <property name="password" value="${db.password}"/>
     </bean>
 
     <bean id="databaseConfig" class="org.openregistry.loader.DatabaseConfigObjectFactoryBean" scope="step">
-        <property name="dataSource" ref="dataSource" />
-        <property name="idField" value="#{sorConfiguration[jobParameters['sor']].personConfiguration.keyField}" />
-        <property name="rawTable" value="#{sorConfiguration[jobParameters['sor']].rawTable}" />
-        <property name="auxTable" value="#{sorConfiguration[jobParameters['sor']].auxTable}" />
+        <property name="dataSource" ref="dataSource"/>
+        <property name="idField" value="#{sorConfiguration[jobParameters['sor']].personConfiguration.keyField}"/>
+        <property name="rawTable" value="#{sorConfiguration[jobParameters['sor']].rawTable}"/>
+        <property name="auxTable" value="#{sorConfiguration[jobParameters['sor']].auxTable}"/>
     </bean>
 
     <bean id="annotationTransactionAspect" factory-method="aspectOf"
-        class="org.springframework.transaction.aspectj.AnnotationTransactionAspect">
+          class="org.springframework.transaction.aspectj.AnnotationTransactionAspect">
         <property name="transactionManager" ref="transactionManager"/>
     </bean>
 
@@ -59,21 +60,22 @@
     </bean>
 
     <bean id="transactionManager" class="org.springframework.orm.jpa.JpaTransactionManager"
-        p:entityManagerFactory-ref="entityManagerFactory"/>
+          p:entityManagerFactory-ref="entityManagerFactory"/>
 
 
-    <bean id="identifierFormatValidatorImpl" class="org.openregistry.core.domain.validation.DefaultIdentifierFormatValidator"/>
+    <bean id="identifierFormatValidatorImpl"
+          class="org.openregistry.core.domain.validation.DefaultIdentifierFormatValidator"/>
 
     <bean name="SoRSpecificationThreadLocalAspect"
           class="org.openregistry.aspect.SoRSpecificationThreadLocalAspect"
           factory-method="aspectOf">
-        <property name="systemOfRecordRepository" ref="systemOfRecordRepository" />
+        <property name="systemOfRecordRepository" ref="systemOfRecordRepository"/>
     </bean>
 
     <bean name="LogAspect"
           class="org.openregistry.aspect.LogAspect"
           factory-method="aspectOf">
-        <property name="messageSource" ref="messageSource" />
+        <property name="messageSource" ref="messageSource"/>
     </bean>
 
     <bean id="messageSource" class="org.springframework.context.support.ResourceBundleMessageSource">
@@ -87,6 +89,15 @@
         </property>
     </bean>
 
-    <bean id="idMatchService" class="org.openregistry.identifier.IdMatchService" />
+    <bean id="idMatchService" class="org.openregistry.identifier.IdMatchService">
+        <property name="idMatchServiceConfig">
+            <bean class="org.openregistry.identifier.IdMatchServiceConfig">
+                <property name="baseUrl" value="${idMatch.baseUrl}" />
+                <property name="username" value="${idMatch.username}" />
+                <property name="password" value="${idMatch.password}" />
+                <property name="version" value="${idMatch.version}" />
+            </bean>
+        </property>
+    </bean>
 
 </beans>
