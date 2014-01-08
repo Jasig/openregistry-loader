@@ -18,7 +18,7 @@ allprojects {
 
     repositories {
         mavenCentral()
-        maven { url "file://${FileSystems.default.getPath(System.getProperty("user.home"), ".m2/repository").toString()}" }
+        mavenLocal()
         flatDir {
             dirs 'lib'
         }
