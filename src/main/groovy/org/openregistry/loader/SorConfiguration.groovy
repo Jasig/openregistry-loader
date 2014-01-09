@@ -25,6 +25,17 @@ class SorNamesConfiguration {
     def family
     def prefix
     def suffix
+
+    def nameConfigurations = [] as Set
+}
+
+class SorNameConfiguration{
+    def type
+    def given
+    def middle
+    def family
+    def prefix
+    def suffix
 }
 
 class SorRolesConfiguration {

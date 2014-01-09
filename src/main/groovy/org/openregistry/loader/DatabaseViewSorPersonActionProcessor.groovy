@@ -70,17 +70,29 @@ class DatabaseViewSorPersonActionProcessor extends PersonActionProcessor impleme
             def doneLeaves = [] as Set
             def donePhones = [] as Set
             item.rows.each { row ->
-                // do name
-                if (!doneNames.containsKey(getFieldValue(sorConfiguration.personConfiguration.namesConfiguration.keyField, row))) {
-                    def type = getFieldValue(sorConfiguration.personConfiguration.namesConfiguration.type, row)
-                    doneNames[getFieldValue(sorConfiguration.personConfiguration.namesConfiguration.keyField, row)] = item.sorPerson.addName(referenceRepository.findType(Type.DataTypes.NAME, type)).with { name ->
-                        ['given', 'middle', 'family', 'prefix', 'suffix'].each {
-                            if (sorConfiguration.personConfiguration.namesConfiguration."${it}") {
-                                name."${it}" = getFieldValue(sorConfiguration.personConfiguration.namesConfiguration."${it}", row)
+                // do names
+                def doName = {key, type, configuration ->
+                    if (!doneNames.containsKey(key)) {
+                        doneNames[key] = item.sorPerson.addName(referenceRepository.findType(Type.DataTypes.NAME, type)).with { name ->
+                            ['given', 'middle', 'family', 'prefix', 'suffix'].each {
+                                if (configuration."${it}") {
+                                    name."${it}" = getFieldValue(configuration."${it}", row)
+                                }
                             }
+                            return name
                         }
-                        return name
                     }
+                }
+                if (sorConfiguration.personConfiguration.namesConfiguration.nameConfigurations) {
+                    // we are horizontal
+                    sorConfiguration.personConfiguration.namesConfiguration.nameConfigurations.each { NameDatabaseViewSorConfiguration nameConfiguration ->
+                        def type = getFieldValue(nameConfiguration.type, row)
+                        doName type, type, nameConfiguration
+                    }
+                } else {
+                    def type = getFieldValue(sorConfiguration.personConfiguration.namesConfiguration.type, row)
+                    def key = getFieldValue(sorConfiguration.personConfiguration.namesConfiguration.keyField, row)
+                    doName key, type, sorConfiguration.personConfiguration.namesConfiguration
                 }
 
                 // do localAttributes

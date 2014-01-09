@@ -47,7 +47,15 @@ Only one of `value` and `staticValue` can be used. `normalizer` is only used if 
         * gender: field: String: gender. Valid values are M, F and `null`
         * ssn: field: String: social security number
         * names (required): group: names configuration
-            * keyField (required): field: key field distinguishing each distinct name. Should be the type of the name.
+            * name: group: A horizontal/pivotted name configuration. If any of these exist, then the row based
+              configuration will not be used.
+                * type (required): field: name type
+                * given (required): field: given name
+                * middle: field: middle name or initial
+                * family: field: family name
+                * prefix: field: name prefix
+                * suffix: field: name suffix
+            * keyField: field: key field distinguishing each distinct name. Should be the type of the name.
             * given (required): field: given name
             * middle: field: middle name or initial
             * family: field: family name

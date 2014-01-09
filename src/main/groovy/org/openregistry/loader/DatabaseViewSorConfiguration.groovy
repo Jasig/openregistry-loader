@@ -22,6 +22,14 @@ class NamesDatabaseViewSorConfiguration extends SorNamesConfiguration {
     }
 }
 
+class NameDatabaseViewSorConfiguration extends SorNameConfiguration {
+    def keyField
+
+    def getType() {
+        super.@type ?: this.keyField
+    }
+}
+
 class RolesDatabaseViewSorConfiguration extends SorRolesConfiguration {
     def keyField
 
